@@ -2,9 +2,9 @@ using institute.Enums;
 
 namespace institute.DTOs;
 
-public class MarkAttendanceDto
+public class AttendancePageDto
 {
     public int StudentId { get; set; }
-    public int ClassSessionId { get; set; }
+    public string StudentName { get; set; } = null!;
     public AttendanceStatus Status { get; set; }
 }

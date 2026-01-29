@@ -110,6 +110,8 @@ public interface IAdminService
     Task<PagedResult<ClassSessionPageDto>> PaginationClassSession(PaginationRequestDto dto);
 
     Task<PagedResult<TermPageDto>> PaginationTerm(PaginationRequestDto dto);
+    Task<PagedResult<AttendancePageDto>> PaginationAttendance(PaginationRequestDto dto);
+    Task MarkAttendanceAsync(MarkAttendanceDto dto);
 
     #endregion
 

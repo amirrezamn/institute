@@ -20,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<Enrollment> Enrollments { get; }
     public IRepository<Attendance> Attendances { get; }
     public IRepository<ClassSession>  ClassSessions { get; }
+
     
    
     

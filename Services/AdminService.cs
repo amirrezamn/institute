@@ -822,5 +822,51 @@ public class AdminService:IAdminService
        };
     }
 
+    public async Task<PagedResult<AttendancePageDto>> PaginationAttendance(PaginationRequestDto dto)
+    {
+        Expression<Func<Attendance,bool>>? filter = null;
+        if (!string.IsNullOrWhiteSpace(dto.Search))
+        {
+            filter=a=> a.Student.User.FullName.Contains(dto.Search)
+                       || a.Student.User.Email.Contains(dto.Search);
+        }
+        var sortBy = ExpressionHelper.BuildOrderBy<Attendance>(dto.SortBy);
+        var page = await _unitOfWork.Attendances.Pagination(dto.PageNumber, dto.PageSize, sortBy, dto.Ascending, filter,
+            t => t.Session, t => t.Student,t=>t.Student.User);
+        return new PagedResult<AttendancePageDto>
+        {
+            Items = page.Items.Select(s => new AttendancePageDto
+            {
+                StudentId = s.StudentId,
+                StudentName = s.Student.User.FullName,
+                Status = s.Status
+            }).ToList(),
+            PageNumber = page.PageNumber,
+            PageSize = page.PageSize,
+            TotalCount = page.TotalCount,
+        };
+    }
+    #endregion
+
+    #region Attendance
+
+    public async Task MarkAttendanceAsync(MarkAttendanceDto dto)
+    {
+        var exist= (await _unitOfWork.Attendances.FindAsync(a=>a.SessionId==dto.ClassSessionId && a.StudentId==dto.StudentId)).Any();
+        if (exist)
+        {
+            throw new Exception("Attendance already Marked");
+        }
+
+        var attendance = new Attendance
+        {
+            StudentId = dto.StudentId,
+            SessionId = dto.ClassSessionId,
+            Status = dto.Status,
+        };
+        await _unitOfWork.Attendances.AddAsync(attendance);
+        await _unitOfWork.CompleteAsync();
+    }
+
     #endregion
 }

@@ -375,6 +375,18 @@ public class AdminController : ControllerBase
         var result = await _adminService.PaginationTerm(dto);
         return Ok(result);
     }
+    [HttpPost("attendance_pagination")]
+    public async Task<IActionResult> PaginationAttendance([FromBody] PaginationRequestDto dto)
+    {
+        var result = await _adminService.PaginationAttendance(dto);
+        return Ok(result);
+    }
     
     #endregion
+    [HttpPost]
+    public async Task<IActionResult> MarkAttendanceAsync([FromBody] MarkAttendanceDto dto)
+    {
+        await _adminService.MarkAttendanceAsync(dto);
+        return Ok("Mark Attendance successfully");
+    }
 }  
