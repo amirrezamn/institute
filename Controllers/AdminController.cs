@@ -21,13 +21,13 @@ public class AdminController : ControllerBase
 
     #region Student
 
-    [HttpPost("student")]
+    [HttpPost("create_student")]
     public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDto dto)
     {
         await _adminService.AddStudentAsync(dto);
         return Ok("Student created successfully");
     }
-    [HttpPost("studentP")]
+    [HttpPost("update-student")]
     public async Task<IActionResult> UpdateStudent([FromBody] UpdateStudentDto dto)
     {
         await _adminService.UpdateStudentAsync(dto);
@@ -47,7 +47,7 @@ public class AdminController : ControllerBase
         return Ok("Student HardDeleted successfully");
     }
 
-    [HttpGet("student")]
+    [HttpGet("all_student")]
     public async Task<IActionResult> GetAllStudent()
     {
        var  result=await _adminService.GetAllStudentsAsync();
@@ -58,13 +58,13 @@ public class AdminController : ControllerBase
 
     #region Teacher
 
-    [HttpPost("teacher")]
+    [HttpPost("create_teacher")]
     public async Task<IActionResult> AddTeacher([FromBody] CreateTeacherDto dto)
     {
         await _adminService.AddTeacherAsync(dto);
         return Ok("Teacher added successfully");
     }
-    [HttpPost("teacherP")]
+    [HttpPost("update-teacher")]
     public async Task<IActionResult> UpdateTeacher([FromBody] UpdateTeacherDto dto)
     {
         await _adminService.UpdateTeacherAsync(dto);
@@ -84,7 +84,7 @@ public class AdminController : ControllerBase
         return Ok("Teacher HardDeleted successfully");
     }
 
-    [HttpGet("teacher")]
+    [HttpGet("all_teacher")]
     public async Task<IActionResult> GetAllTeachers()
     {
         var result = await _adminService.GetAllTeachersAsync();
@@ -95,13 +95,13 @@ public class AdminController : ControllerBase
 
     #region Admin
 
-    [HttpPost("admin")]
+    [HttpPost("create_admin")]
     public async Task<IActionResult> AddAdmin([FromBody] CreateAdminDto dto)
     {
         await _adminService.AddAdminAsync(dto);
         return Ok("Admin created successfully");
     }
-    [HttpPost("adminP")]
+    [HttpPost("update-admin")]
     public async Task<IActionResult> UpdateAdmin([FromBody] UpdateAdminDto dto)
     {
         await _adminService.UpdateAdminAsync(dto);
@@ -122,7 +122,7 @@ public class AdminController : ControllerBase
         return Ok("Admin HardDeleted successfully");
     }
 
-    [HttpGet("admin")]
+    [HttpGet("all_admin")]
     public async Task<IActionResult> GetAllAdmins()
     {
         var result = await _adminService.GetAllAdminsAsync();
@@ -133,13 +133,13 @@ public class AdminController : ControllerBase
 
     #region Term
 
-    [HttpPost("term")]
+    [HttpPost("create_term")]
     public async Task<IActionResult> CreateTerm([FromBody] CreateTermDto dto)
     {
         await _adminService.CreateTermAsync(dto);
         return Ok("Term created successfully");
     }
-    [HttpPost("termP")]
+    [HttpPost("update-term")]
     public async Task<IActionResult> UpdateTerm([FromBody] UpdateTermDto dto)
     {
         await _adminService.UpdateTermAsync(dto);
@@ -157,7 +157,7 @@ public class AdminController : ControllerBase
         await _adminService.HardDeleteTermAsync(termId);
         return Ok("Term HardDeleted successfully");
     }
-    [HttpGet("term")]
+    [HttpGet("all_term")]
     public async Task<IActionResult> GetAllTerms()
     {
         var result= await _adminService.GetAllTermsAsync();
@@ -174,7 +174,7 @@ public class AdminController : ControllerBase
         await _adminService.AddRoleAsync(dto);
         return Ok("Role created successfully");
     }
-    [HttpPost("roleP")]
+    [HttpPost("update-role")]
     public async Task<IActionResult> UpdateRole([FromBody] UpdateRoleDto dto)
     {
         await _adminService.UpdateRoleAsync(dto);
@@ -195,7 +195,7 @@ public class AdminController : ControllerBase
         return Ok("Role HardDeleted successfully");
     }
 
-    [HttpGet("role")]
+    [HttpGet("all-role")]
     public async Task<IActionResult> GetAllRolesAsync()
     {
         var result = await _adminService.GetAllRolesAsync();
@@ -211,7 +211,7 @@ public class AdminController : ControllerBase
         return Ok("Assign Role To User successfully");
     }
 
-    [HttpGet("user")]
+    [HttpGet("all_user")]
     public async Task<IActionResult> GetAllUsers()
     {
         var result = await _adminService.GetAllUsersAsync();
@@ -235,13 +235,13 @@ public class AdminController : ControllerBase
     #region Course
 
 
-    [HttpPost("course")]
+    [HttpPost("create_course")]
     public async Task<IActionResult> CreateCourseAsync([FromBody] CreateCourseDto dto)
     {
         await _adminService.CreateCourseAsync(dto);
         return Ok("course created successfully");
     }
-    [HttpPost("courseP")]
+    [HttpPost("update-course")]
     public async Task<IActionResult> UpdateCourseAsync([FromBody] UpdateCourseDto dto)
     {
         await _adminService.UpdateCourseAsync(dto);
@@ -262,7 +262,7 @@ public class AdminController : ControllerBase
         return Ok("course HardDeleted successfully");
     }
 
-    [HttpGet("course")]
+    [HttpGet("all_course")]
     public async Task<IActionResult> GetAllCoursesAsync()
     {
         var result = await _adminService.GetAllCoursesAsync();
@@ -273,13 +273,13 @@ public class AdminController : ControllerBase
 
     #region ClassRoom
 
-    [HttpPost("classroom")]
+    [HttpPost("create_classroom")]
     public async Task<IActionResult> CreateClassroom([FromBody] CreateClassRoomDto dto)
     {
         await _adminService.CreateClassRoomAsync(dto);
         return Ok("Classroom created successfully");
     }
-    [HttpPost("classroomP")]
+    [HttpPost("update-classroom")]
     public async Task<IActionResult> UpdateClassroomAsync([FromBody] UpdateClassRoomDto dto)
     {
         await _adminService.UpdateClassRoomAsync(dto);
@@ -298,7 +298,7 @@ public class AdminController : ControllerBase
         await _adminService.HardDeleteClassRoomAsync(classroomId);
         return Ok("Classroom HardDeleted successfully");
     }
-    [HttpGet("classroom")]
+    [HttpGet("all_classroom")]
     public async Task<IActionResult> GetAllClassroomsAsync()
     {
         var result = await _adminService.GetAllClassRoomsAsync();
@@ -309,14 +309,14 @@ public class AdminController : ControllerBase
 
     #region EnrollStudent
 
-    [HttpPost("enrollstudent")]
+    [HttpPost("enrollment")]
     public async Task<IActionResult> EnrollStudentAsync([FromBody] EnrollStudentDto dto)
     {
         await _adminService.EnrollStudentAsync(dto);
         return Ok("Enroll Student successfully");
     }
 
-    [HttpDelete("enrollstudent/{StudentId}")]
+    [HttpDelete("enrollment/{StudentId}")]
     public async Task<IActionResult> SoftDeleteEnrollStudentAsync([FromRoute] int studentId)
     {
         await _adminService.SoftDeleteStudentAsync(studentId);
@@ -330,7 +330,7 @@ public class AdminController : ControllerBase
         return Ok("Enroll Student HardDeleted successfully");
     }
 
-    [HttpGet("enrollstudent")]
+    [HttpGet("all_enrollment")]
     public async Task<IActionResult> GetAllEnrollStudentsAsync()
     {
         var result= await _adminService.GetAllEnrollmentsAsync();

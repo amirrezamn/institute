@@ -10,7 +10,6 @@ public class TeacherProfile
     public string Speciality { get; set; } = string.Empty;
     [MaxLength(50)]
     public int ExperienceYears { get; set; } 
-    public bool IsDeleted { get; set; } = false;
     [MaxLength(50)]
     public string PhoneNumber { get; set; } = string.Empty;
 

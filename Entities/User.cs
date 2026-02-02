@@ -13,7 +13,7 @@ public class User
     [Required]
     [EmailAddress]
     public string Email { get; set; } = null!;
-    [MaxLength(50)]
+    [MaxLength(250)]
     [Required]
     public string PasswordHash { get; set; } = null!;
     public bool IsActive { get; set; } = true;

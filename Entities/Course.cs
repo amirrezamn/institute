@@ -9,4 +9,5 @@ public class Course
     public string Title { get; set; } = string.Empty;
     public int Level { get; set; }
     public bool IsDeleted { get; set; }
+    
 }    

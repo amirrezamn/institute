@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using institute.Entities;
@@ -9,9 +8,11 @@ namespace institute.Data;
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options) { }
+        : base(options)
+    {
+    }
 
-    // --------------------------- DbSet ---------------------------
+    // ======================= DbSets =======================
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
@@ -27,26 +28,28 @@ public class AppDbContext : DbContext
     public DbSet<ClassSession> ClassSessions => Set<ClassSession>();
     public DbSet<Attendance> Attendances => Set<Attendance>();
 
-    // --------------------------- Model Configuration ---------------------------
+    // ======================= Model Config =======================
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // --------------------------- User & Roles ---------------------------
+        // ---------- UserRole (Many-to-Many) ----------
         modelBuilder.Entity<UserRole>()
             .HasKey(x => new { x.UserId, x.RoleId });
 
+        // ---------- User ----------
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
 
+        // ---------- Seed Roles ----------
         modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Name = "Admin" },
             new Role { Id = 2, Name = "Teacher" },
             new Role { Id = 3, Name = "Student" }
         );
 
-        // --------------------------- Profiles 1:1 ---------------------------
+        // ---------- StudentProfile (1:1 with User) ----------
         modelBuilder.Entity<StudentProfile>()
             .HasKey(s => s.UserId);
 
@@ -56,6 +59,7 @@ public class AppDbContext : DbContext
             .HasForeignKey<StudentProfile>(s => s.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // ---------- TeacherProfile (1:1 with User) ----------
         modelBuilder.Entity<TeacherProfile>()
             .HasKey(t => t.UserId);
 
@@ -65,7 +69,7 @@ public class AppDbContext : DbContext
             .HasForeignKey<TeacherProfile>(t => t.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --------------------------- ClassRoom ---------------------------
+        // ---------- ClassRoom ----------
         modelBuilder.Entity<ClassRoom>()
             .HasOne(c => c.Teacher)
             .WithMany(t => t.Classes)
@@ -84,7 +88,7 @@ public class AppDbContext : DbContext
             .HasForeignKey(c => c.TermId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --------------------------- Enrollment ---------------------------
+        // ---------- Enrollment ----------
         modelBuilder.Entity<Enrollment>()
             .HasIndex(e => new { e.StudentId, e.ClassRoomId })
             .IsUnique();
@@ -101,14 +105,14 @@ public class AppDbContext : DbContext
             .HasForeignKey(e => e.ClassRoomId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --------------------------- ClassSession ---------------------------
+        // ---------- ClassSession ----------
         modelBuilder.Entity<ClassSession>()
             .HasOne(s => s.ClassRoom)
             .WithMany(c => c.Sessions)
             .HasForeignKey(s => s.ClassRoomId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --------------------------- Attendance ---------------------------
+        // ---------- Attendance ----------
         modelBuilder.Entity<Attendance>()
             .HasOne(a => a.Session)
             .WithMany(s => s.Attendances)
@@ -121,16 +125,18 @@ public class AppDbContext : DbContext
             .HasForeignKey(a => a.StudentId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // --------------------------- Global Soft Delete Filter ---------------------------
+        // ---------- Global Soft Delete ----------
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
             {
                 var parameter = Expression.Parameter(entityType.ClrType, "e");
-                var prop = Expression.Property(parameter, nameof(ISoftDelete.IsDeleted));
-                var condition = Expression.Equal(prop, Expression.Constant(false));
+                var property = Expression.Property(parameter, nameof(ISoftDelete.IsDeleted));
+                var condition = Expression.Equal(property, Expression.Constant(false));
                 var lambda = Expression.Lambda(condition, parameter);
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
+
+                modelBuilder.Entity(entityType.ClrType)
+                    .HasQueryFilter(lambda);
             }
         }
     }

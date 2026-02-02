@@ -14,7 +14,6 @@ public class AdminProfile
     public string Department { get; set; } = "Management";
     [MaxLength(50)]
     public string PhoneNumber { get; set; } = string.Empty;
-    public bool IsDeleted { get; set; } = false;
     
 
     // Navigation

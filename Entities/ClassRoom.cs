@@ -16,6 +16,8 @@ public class ClassRoom
     public Course Course { get; set; } = null!;
 
     public int TeacherId { get; set; }
+    public bool IsDeleted { get; set; }
+
     public TeacherProfile Teacher { get; set; } = null!;
 
     // Navigation

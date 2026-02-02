@@ -11,4 +11,6 @@ public class Enrollment
     public ClassRoom ClassRoom { get; set; } = null!;
 
     public DateTime EnrollDate { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; }
+
 }
