@@ -17,6 +17,8 @@ public interface IRepository<T> where T : class
     Task<PagedResult<T>> Pagination<TKey>(int pageNumber, int pageSize,
         Expression<Func<T, TKey>> orderBy, bool ascending = true,
         Expression<Func<T, bool>>? filter = null, params Expression<Func<T, object>>[] includes);
+
+    Task<IEnumerable<T>> FindIgnoreQueryFiltersAsync(Expression<Func<T, bool>> predicate);
 }    
     
     

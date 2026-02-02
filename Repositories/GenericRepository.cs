@@ -127,6 +127,10 @@ public class GenericRepository<T>: IRepository<T> where T : class
         await Task.CompletedTask;
         
     }
+    public async Task<IEnumerable<T>> FindIgnoreQueryFiltersAsync(Expression<Func<T,bool>> predicate)
+    {
+        return await _dbSet.IgnoreQueryFilters().Where(predicate).ToListAsync();
+    }
 
   
 }

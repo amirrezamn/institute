@@ -49,39 +49,38 @@ public class AuthService: IAuthService
     }
     public async Task RegisterAsync(RegisterRequestDto dto)
     {
-        var exists = (await _unitOfWork.Users
-                .FindAsync(u => u.Email == dto.Email))
-            .Any();
+        
+        var exists = (await _unitOfWork.Users.FindIgnoreQueryFiltersAsync(u => u.Email == dto.Email)).Any();
 
-        if (exists)
-            throw new Exception("Email already exists");
+            if (exists)
+                throw new Exception("Email already exists");
 
-        var user = new User
-        {
-            FullName = dto.FullName,
-            Email = dto.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-            IsDeleted = false
-        };
+            var user = new User
+            {
+                FullName = dto.FullName,
+                Email = dto.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                IsDeleted = false
+            };
 
-        await _unitOfWork.Users.AddAsync(user);
-        await _unitOfWork.CompleteAsync();
+            await _unitOfWork.Users.AddAsync(user);
+            await _unitOfWork.CompleteAsync();
 
-        var role = (await _unitOfWork.Roles
-                .FindAsync(r => r.Name == dto.Role))
-            .FirstOrDefault();
+            var role = (await _unitOfWork.Roles
+                    .FindAsync(r => r.Name == dto.Role))
+                .FirstOrDefault();
 
-        if (role == null)
-            throw new Exception("Role not found");
+            if (role == null)
+                throw new Exception("Role not found");
 
-        var userRole = new UserRole
-        {
-            UserId = user.Id,
-            RoleId = role.Id
-        };
+            var userRole = new UserRole
+            {
+                UserId = user.Id,
+                RoleId = role.Id
+            };
 
-        await _unitOfWork.UserRoles.AddAsync(userRole);
-        await _unitOfWork.CompleteAsync();
+            await _unitOfWork.UserRoles.AddAsync(userRole);
+            await _unitOfWork.CompleteAsync();
     }
 
     private string GenerateJwtToken(User user, List<string> roles)
