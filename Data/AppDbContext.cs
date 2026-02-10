@@ -27,6 +27,9 @@ public class AppDbContext : DbContext
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
     public DbSet<ClassSession> ClassSessions => Set<ClassSession>();
     public DbSet<Attendance> Attendances => Set<Attendance>();
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+    public DbSet<Grade> Grades => Set<Grade>();
+
 
     // ======================= Model Config =======================
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -124,6 +127,33 @@ public class AppDbContext : DbContext
             .WithMany(s => s.Attendances)
             .HasForeignKey(a => a.StudentId)
             .OnDelete(DeleteBehavior.Restrict);
+        // ---------- PasswordResetToken ---------- 
+            modelBuilder.Entity<PasswordResetToken>()
+            .HasOne(t => t.User)
+            .WithMany() // لازم نیست navigation تو User بذاری
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<PasswordResetToken>()
+            .HasIndex(t => t.Token)
+            .IsUnique();
+        // ----------Grade----------
+        modelBuilder.Entity<Grade>()
+            .HasIndex(g => new { g.StudentId, g.ClassRoomId })
+            .IsUnique();
+
+        modelBuilder.Entity<Grade>()
+            .HasOne(g => g.Student)
+            .WithMany(s => s.Grades)
+            .HasForeignKey(g => g.StudentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Grade>()
+            .HasOne(g => g.ClassRoom)
+            .WithMany()
+            .HasForeignKey(g => g.ClassRoomId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
 
         // ---------- Global Soft Delete ----------
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())

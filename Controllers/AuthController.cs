@@ -34,6 +34,19 @@ namespace institute.Controllers;
             await _authService.RegisterAsync(dto);
             return Ok("User registered successfully");
         }
+        [HttpPost("request-reset-password")]
+        public async Task<IActionResult> RequestResetPassword([FromBody] ForgotPasswordDto dto)
+        {
+            await _authService.ForgotPasswordAsync(dto.Email);
+            return Ok("Reset link sent to your email.");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] PasswordResetDto dto)
+        {
+            await _authService.ResetPasswordAsync(dto);
+            return Ok("Password reset successfully.");
+        }
     }
 
 

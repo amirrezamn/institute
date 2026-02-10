@@ -23,10 +23,24 @@ public class GenericRepository<T>: IRepository<T> where T : class
         return entities;
     }
 
-    public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+    // public async Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate)
+    // {
+    //     return await _dbSet.Where(predicate).ToListAsync();
+    // }
+    
+    public async Task<List<T>> FindAsync(
+        Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
     {
-        return await _dbSet.Where(predicate).ToListAsync();
+        IQueryable<T> query = _dbSet;
+
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+
+        return await query.Where(predicate).ToListAsync();
     }
+
 
     public async Task<PagedResult<T>> Pagination<TKey>(int pageNumber, int pageSize,
         Expression<Func<T,TKey>> orderBy,bool ascending=true,Expression<Func<T, bool>>? filter = null,params Expression<Func<T, object>>[] includes)
@@ -131,6 +145,29 @@ public class GenericRepository<T>: IRepository<T> where T : class
     {
         return await _dbSet.IgnoreQueryFilters().Where(predicate).ToListAsync();
     }
+    public async Task<T?> FindOneAsync(Expression<Func<T, bool>> predicate)
+    {
+        return await _dbSet.FirstOrDefaultAsync(predicate);
+    }
 
-  
+    public async Task<List<T>> FindWithIncludesAsync(
+        Expression<Func<T, bool>> predicate,
+        params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _dbSet;
+
+        foreach (var include in includes)
+            query = query.Include(include);
+
+        return await query.Where(predicate).ToListAsync();
+    }
+    public async Task<T?> FindOneWithIncludesAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+    {
+        IQueryable<T> query = _dbSet;
+        foreach (var include in includes)
+        {
+            query = query.Include(include);
+        }
+        return await query.FirstOrDefaultAsync(predicate);
+    }
 }

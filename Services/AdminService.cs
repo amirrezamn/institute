@@ -867,6 +867,7 @@ public class AdminService:IAdminService
         await _unitOfWork.Attendances.AddAsync(attendance);
         await _unitOfWork.CompleteAsync();
     }
+    
 
     #endregion
 }

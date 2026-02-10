@@ -201,6 +201,94 @@ namespace institute.Migrations
                     b.ToTable("Enrollments");
                 });
 
+            modelBuilder.Entity("institute.Entities.Grade", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("ClassActivity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ClassRoomId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("FinalExam")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPassed")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Listening")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Midterm")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Speaking")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalScore")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Writing")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClassRoomId");
+
+                    b.HasIndex("StudentId", "ClassRoomId")
+                        .IsUnique();
+
+                    b.ToTable("Grades");
+                });
+
+            modelBuilder.Entity("institute.Entities.PasswordResetToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpireAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetTokens");
+                });
+
             modelBuilder.Entity("institute.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -465,6 +553,36 @@ namespace institute.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("institute.Entities.Grade", b =>
+                {
+                    b.HasOne("institute.Entities.ClassRoom", "ClassRoom")
+                        .WithMany()
+                        .HasForeignKey("ClassRoomId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("institute.Entities.StudentProfile", "Student")
+                        .WithMany("Grades")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ClassRoom");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("institute.Entities.PasswordResetToken", b =>
+                {
+                    b.HasOne("institute.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("institute.Entities.StudentProfile", b =>
                 {
                     b.HasOne("institute.Entities.User", "User")
@@ -528,6 +646,8 @@ namespace institute.Migrations
                     b.Navigation("Attendances");
 
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Grades");
                 });
 
             modelBuilder.Entity("institute.Entities.TeacherProfile", b =>

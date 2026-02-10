@@ -20,6 +20,8 @@ public class UnitOfWork : IUnitOfWork
     public IRepository<Enrollment> Enrollments { get; }
     public IRepository<Attendance> Attendances { get; }
     public IRepository<ClassSession>  ClassSessions { get; }
+    public IRepository<PasswordResetToken> PasswordResetTokens { get; }
+    public IRepository<Grade>  Grades { get; }
 
     
    
@@ -42,7 +44,8 @@ public class UnitOfWork : IUnitOfWork
         Enrollments=new GenericRepository<Enrollment>(_Context);
         Attendances=new GenericRepository<Attendance>(_Context);
         ClassSessions=new GenericRepository<ClassSession>(_Context);
-      
+        PasswordResetTokens=new GenericRepository<PasswordResetToken>(_Context);
+        Grades=new GenericRepository<Grade>(_Context);
     }
 
     public async Task<int> CompleteAsync()

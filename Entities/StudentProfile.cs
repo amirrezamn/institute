@@ -12,7 +12,9 @@ public class StudentProfile
     public string Level { get; set; } = "Beginner";
     [MaxLength(50)]
     public string PhoneNumber { get; set; } = null!;
+    
     // Navigation
     public ICollection<Enrollment> Enrollments { get; set; } = [];
     public ICollection<Attendance> Attendances { get; set; } = [];
+    public ICollection<Grade> Grades { get; set; } = [];
 }

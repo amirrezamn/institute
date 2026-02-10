@@ -17,6 +17,8 @@ public interface IUnitOfWork:IDisposable
     IRepository<Enrollment>  Enrollments { get; }
     IRepository<Attendance>  Attendances { get; }
     IRepository<ClassSession>  ClassSessions { get; }
+    IRepository<PasswordResetToken>  PasswordResetTokens { get; }
+    IRepository<Grade>  Grades { get; }
     
     Task<int> CompleteAsync();  
 
